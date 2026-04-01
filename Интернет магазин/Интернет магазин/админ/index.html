@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интернет магазин</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#111111">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Модальное окно для пароля администратора -->
+    <div id="adminPasswordModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('adminPasswordModal')">&times;</button>
+            <h2><i class="fas fa-shield-alt"></i> Доступ к административной панели</h2>
+            <p style="text-align: center; margin-bottom: 1.5rem; color: #7f8c8d;">Введите пароль администратора для доступа</p>
+            <form id="adminPasswordForm">
+                <div class="form-group">
+                    <label for="adminPassword">Пароль администратора <span class="required">*</span></label>
+                    <input type="password" id="adminPassword" placeholder="Введите пароль" required autocomplete="off">
+                    <div class="form-error" id="adminPasswordError"></div>
+                </div>
+                <button type="submit" class="modal-btn">Войти в админ-панель</button>
+                <button type="button" class="modal-btn secondary" onclick="closeModal('adminPasswordModal')">Отмена</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальные окна для пользователей -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            <h2>Вход</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email или телефон <span class="required">*</span></label>
+                    <input type="text" id="loginEmail" required>
+                    <div class="form-error" id="loginEmailError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль <span class="required">*</span></label>
+                    <input type="password" id="loginPassword" required>
+                    <div class="form-error" id="loginPasswordError"></div>
+                </div>
+                <button type="submit" class="modal-btn">Войти</button>
+                <div class="form-switch">
+                    Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regName">Имя <span class="required">*</span></label>
+                        <input type="text" id="regName" required>
+                        <div class="form-error" id="regNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regLastName">Фамилия <span class="required">*</span></label>
+                        <input type="text" id="regLastName" required>
+                        <div class="form-error" id="regLastNameError"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email <span class="required">*</span></label>
+                    <input type="email" id="regEmail" required>
+                    <div class="form-error" id="regEmailError"></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regPhone">Телефон <span class="required">*</span></label>
+                        <input type="tel" id="regPhone" placeholder="+996 XXX XXX XXX" required>
+                        <div class="form-error" id="regPhoneError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regBirthDate">Дата рождения</label>
+                        <input type="date" id="regBirthDate">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regPassword">Пароль <span class="required">*</span></label>
+                        <input type="password" id="regPassword" required>
+                        <div class="form-error" id="regPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Подтверждение пароля <span class="required">*</span></label>
+                        <input type="password" id="regConfirmPassword" required>
+                        <div class="form-error" id="regConfirmPasswordError"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="modal-btn">Зарегистрироваться</button>
+                <div class="form-switch">
+                    Уже есть аккаунт? <a onclick="showLogin()">Войти</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('profileModal')">&times;</button>
+            <h2>Редактировать профиль</h2>
+            <form id="profileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="profileName">Имя</label>
+                        <input type="text" id="profileName">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileLastName">Фамилия</label>
+                        <input type="text" id="profileLastName">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="profilePhone">Телефон</label>
+                        <input type="tel" id="profilePhone" placeholder="+996 XXX XXX XXX">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileBirthDate">Дата рождения</label>
+                        <input type="date" id="profileBirthDate">
+                    </div>
+                </div>
+
+                <button type="submit" class="modal-btn">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('addressModal')">&times;</button>
+            <h2>Добавить адрес</h2>
+            <form id="addressForm">
+                <div class="form-group">
+                    <label for="addressName">Название адреса <span class="required">*</span></label>
+                    <input type="text" id="addressName" placeholder="Например: Дом, Работа, Дом родителей" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="addressFull">Полный адрес <span class="required">*</span></label>
+                    <textarea id="addressFull" rows="3" placeholder="Улица, дом, квартира" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="addressCity">Город <span class="required">*</span></label>
+                        <select id="addressCity" required>
+                            <option value="">Выберите город</option>
+                            <option value="Бишкек">Бишкек</option>
+                            <option value="Ош">Ош</option>
+                            <option value="Каракол">Каракол</option>
+                            <option value="Нарын">Нарын</option>
+                            <option value="Талас">Талас</option>
+                            <option value="Джалал-Абад">Джалал-Абад</option>
+                            <option value="Баткен">Баткен</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="addressPostal">Почтовый индекс</label>
+                        <input type="text" id="addressPostal" placeholder="720000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Тип адреса</label>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="radio" name="addressType" value="home" checked> 🏠 Дом
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="radio" name="addressType" value="work"> 🏢 Работа
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="radio" name="addressType" value="other"> 📍 Другое
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="addressInstructions">Дополнительная информация</label>
+                    <textarea id="addressInstructions" rows="2" placeholder="Например: У дома есть дерево, 5 этаж..."></textarea>
+                </div>
+
+                <button type="submit" class="modal-btn">Добавить адрес</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shop"></i> My
+                    <span>shop</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home" class="nav-link nav-active">Главная</a></li>
+                        <li><a href="#categories" class="nav-link">Категории</a></li>
+                    </ul>
+                </nav>
+                <div class="container-blok">
+                    <div class="header-actions">
+                        <div class="user-menu" id="userMenu" style="display: none;">
+                            <div class="user-avatar" id="userAvatar"></div>
+                            <div class="user-dropdown">
+                                <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Мой профиль</a>
+                                <a href="#" onclick="showAddresses()"><i class="fas fa-map-marker-alt"></i> Мои адреса</a>
+                                <a href="#"><i class="fas fa-shopping-bag"></i> Мои заказы</a>
+                                <a href="#" onclick="showEditProfile()"><i class="fas fa-edit"></i> Редактировать профиль</a>
+                                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                            </div>
+                        </div>
+                        <button class="header-btn" id="loginBtn" onclick="showLogin()">Вход / Регистрация</button>
+                        <a href="/admin/index.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count" id="cartCount">0</span>
+                        </a>
+                    </div>
+                    <div class="blok">
+                        <button class="knopka" onclick="showAdminPasswordModal()">Администрация</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Кыргыз маркети</h1>
+                <p>Все необходимые товары здесь</p>
+                <a href="#categories" class="btn">Посмотреть каталог</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Категории -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <h2 class="section-title">Категории</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <h3>Мебель</h3>
+                    <p>Диваны, кресла, стулья</p>
+                    <a href="/Интернет магазин/Интернет магазин/отург.html" class="btn">Подробнее</a>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Продукты питания</h3>
+                    <p>Свежие продукты, бакалея</p>
+                    <a href="/Интернет магазин/Интернет магазин/Тамак аш.html" class="btn">Подробнее</a>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Телефоны</h3>
+                    <p>iPhone, Samsung, Xiaomi, Huawei, Oppo</p>
+                    <a href="/Интернет магазин/Интернет магазин/phon_shop.html" class="btn">Подробнее</a>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h3>Одежда</h3>
+                    <p>Рубашки, свитера, куртки</p>
+                    <a href="/Интернет магазин/Интернет магазин/кийимдер.html" class="btn">Подробнее</a>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h3>Ноутбуки</h3>
+                    <p>Apple MacBook Pro, ASUS, Lenovo</p>
+                    <a href="/Интернет магазин/Интернет магазин/noutbook.html" class="btn">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Профиль бөлүмү (скрыт по умолчанию) -->
+    <div id="profilePage" style="display: none;">
+        <section class="profile-container">
+            <div class="container">
+                <div style="display: grid; grid-template-columns: 250px 1fr; gap: 2rem;">
+                    <div class="profile-sidebar">
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="profilePageAvatar"></div>
+                            <h3 id="profilePageName"></h3>
+                            <p id="profilePageEmail"></p>
+                        </div>
+                        <ul class="profile-menu">
+                            <li><a href="#profileInfo" class="active" onclick="showProfileSection('profileInfo')"><i class="fas fa-user"></i> Личная информация</a></li>
+                            <li><a href="#profileAddress" onclick="showProfileSection('profileAddress')"><i class="fas fa-map-marker-alt"></i> Адреса</a></li>
+                            <li><a href="#profileOrders" onclick="showProfileSection('profileOrders')"><i class="fas fa-shopping-bag"></i> Заказы</a></li>
+                            <li><a href="#profileSecurity" onclick="showProfileSection('profileSecurity')"><i class="fas fa-lock"></i> Безопасность</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="profile-content">
+                        <div id="profileInfo" class="profile-section">
+                            <h3>Личная информация</h3>
+                            <div class="info-row">
+                                <div class="info-label">Полное имя:</div>
+                                <div class="info-value" id="profileFullName"></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Email:</div>
+                                <div class="info-value" id="profileInfoEmail"></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Телефон:</div>
+                                <div class="info-value" id="profilePhoneNumber"></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Дата рождения:</div>
+                                <div class="info-value" id="profileBirthDate"></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Зарегистрирован:</div>
+                                <div class="info-value" id="profileRegistered"></div>
+                            </div>
+                            <button class="btn-edit" onclick="showEditProfile()">Редактировать</button>
+                        </div>
+
+                        <div id="profileAddress" class="profile-section" style="display: none;">
+                            <h3>Мои адреса</h3>
+                            <div class="address-list" id="addressList">
+                                <!-- Адреса загружаются сюда -->
+                            </div>
+                            <button class="btn-edit" onclick="showAddressModal()">Добавить новый адрес</button>
+                        </div>
+
+                        <div id="profileOrders" class="profile-section" style="display: none;">
+                            <h3>Мои заказы</h3>
+                            <p>Заказов нет</p>
+                        </div>
+
+                        <div id="profileSecurity" class="profile-section" style="display: none;">
+                            <h3>Безопасность</h3>
+                            <div class="info-row">
+                                <div class="info-label">Статус аккаунта:</div>
+                                <div class="info-value">Активен</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Последний вход:</div>
+                                <div class="info-value" id="lastLogin"></div>
+                            </div>
+                            <button class="btn-edit" style="background: #e74c3c;" onclick="logout()">Выйти из всех устройств</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Myshop</h3>
+                    <p>Мы предлагаем вам высококачественный интернет-магазин. Сделайте свой дом уютным и комфортным!</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Категории</h3>
+                    <ul>
+                        <li><a href="отург.html">Стулья и кресла</a></li>
+                        <li><a href="Ашкана.html">Кухонная мебель</a></li>
+                        <li><a href="Жатак.html">Спальня</a></li>
+                        <li><a href="кинотеатр.html">Домашний кинотеатр</a></li>
+                        <li><a href="#">Офисная мебель</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Компания</h3>
+                    <ul>
+                        <li><a href="#about">О нас</a></li>
+                        <li><a href="#">Условия доставки</a></li>
+                        <li><a href="#">Гарантия</a></li>
+                        <li><a href="#">Карьера</a></li>
+                        <li><a href="#">Блог</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Бишкек, Кыргызстан</li>
+                        <li><i class="fas fa-phone"></i> +996 502 526 100</li>
+                        <li><i class="fas fa-envelope"></i> info@myshop.kg</li>
+                        <li><i class="fas fa-clock"></i> 9:00 - 20:00, Пн-Пт</li>
+                        <li><i class="fas fa-truck"></i> Бесплатная доставка по городу</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                &copy; 2026 Myshop - Все права защищены.
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
